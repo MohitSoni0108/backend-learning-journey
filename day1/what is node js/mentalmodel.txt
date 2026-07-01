@@ -1,0 +1,247 @@
+# Node.js — One Page Mental Model
+
+## First Principle
+
+JavaScript is a language.
+
+A language cannot run by itself.
+
+It needs a **Runtime Environment**.
+
+```text
+JavaScript
+     ↓
+Runtime Environment
+```
+
+Examples:
+
+```text
+Browser → Frontend Runtime
+Node.js → Backend Runtime
+```
+
+---
+
+## Browser Mental Model
+
+```text
+Browser
+├── V8 Engine
+├── DOM
+├── Web APIs
+├── Event Loop
+└── Browser Features
+```
+
+### Definition
+
+Browser = V8 Engine + Browser APIs
+
+### Superpowers Given By Browser
+
+```text
+document
+window
+localStorage
+fetch
+events
+```
+
+---
+
+## The Problem
+
+JavaScript originally worked only inside browsers.
+
+Because browsers are secure environments, JavaScript could NOT:
+
+```text
+Read Files
+Access OS
+Create Servers
+Talk Directly To Databases
+```
+
+---
+
+## Why Node.js Was Created
+
+Developers wanted to use JavaScript for backend too.
+
+Ryan Dahl created Node.js in 2009.
+
+### Mental Model
+
+```text
+Node.js
+=
+V8 Engine
++
+Node APIs
++
+Event Loop
++
+OS Access
+```
+
+---
+
+## Browser vs Node.js
+
+```text
+Browser
+=
+V8 + Browser APIs
+
+Node.js
+=
+V8 + Node APIs
+```
+
+### Key Insight
+
+The JavaScript language is exactly the same.
+
+Only the environment and available APIs change.
+
+---
+
+## Browser World vs Computer World
+
+```text
+Browser
+=
+Web Page World
+```
+
+```text
+Node.js
+=
+Computer World
+```
+
+Example:
+
+```js
+document.querySelector("h1");
+```
+
+✅ Browser
+
+❌ Node.js
+
+Because Node has no DOM.
+
+---
+
+## Node.js Superpowers
+
+### File System
+
+```text
+Read Files
+Write Files
+Delete Files
+```
+
+### Operating System
+
+```text
+CPU Info
+Memory Info
+Platform Info
+```
+
+### Network
+
+```text
+Create Servers
+Handle Requests
+Send Responses
+```
+
+---
+
+## Why Backend Uses Node.js
+
+Backend needs to:
+
+```text
+Receive Requests
+Talk To Databases
+Read/Write Files
+Authenticate Users
+Send Emails
+Process Payments
+```
+
+Node.js provides access to all these capabilities.
+
+---
+
+## Complete Picture
+
+```text
+JavaScript
+      ↓
+Runtime Environment
+      ↓
+ ┌───────────────┐
+ │               │
+ ▼               ▼
+
+Browser       Node.js
+ │               │
+ ▼               ▼
+
+Frontend      Backend
+```
+
+---
+
+## One-Line Definition
+
+Node.js is a JavaScript runtime built on the V8 engine that allows JavaScript to run outside the browser and interact with the operating system, files, networks, and databases.
+
+---
+
+## Backend Roadmap
+
+```text
+JavaScript
+    ↓
+Node.js
+    ↓
+NPM
+    ↓
+Modules
+    ↓
+File System
+    ↓
+HTTP
+    ↓
+Express.js
+    ↓
+REST APIs
+    ↓
+Database
+    ↓
+Authentication
+    ↓
+Backend Projects
+```
+
+## Final Mental Model
+
+```text
+JavaScript = Language
+
+Browser = Frontend Runtime
+
+Node.js = Backend Runtime
+
+Same Language
+Different Environment
+Different APIs
+```

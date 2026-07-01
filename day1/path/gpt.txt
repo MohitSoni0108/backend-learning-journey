@@ -1,0 +1,273 @@
+what is path module 
+
+Perfect. You're now entering the first built-in Node.js modules.
+
+First Principles
+
+When building backend applications, you'll constantly work with files:
+
+project/
+│
+├── app.js
+├── data/
+│   └── users.json
+│
+└── logs/
+    └── app.log
+
+To read or write these files, Node needs file paths.
+
+Example:
+
+"./data/users.json"
+
+But paths are different across operating systems.
+
+Windows:
+
+C:\Users\Mohit\project\data\users.json
+
+Linux/macOS:
+
+/Users/mohit/project/data/users.json
+
+So Node provides the Path Module to safely work with file paths.
+
+What is the Path Module?
+
+The Node.js Path Module is a built-in module that helps you:
+
+Create paths
+Join paths
+Normalize paths
+Extract file names
+Extract extensions
+Get directory names
+
+without worrying about the operating system.
+
+Import it:
+
+CommonJS
+const path = require("path");
+ES Modules
+import path from "path";
+Why Not Just Use Strings?
+
+You could do:
+
+const filePath = __dirname + "/data/users.json";
+
+But what if:
+
+Windows -> \
+Linux    -> /
+
+The path module handles these differences automatically.
+
+Most Important Methods
+1. path.join()
+
+Joins path segments safely.
+
+const path = require("path");
+
+const filePath = path.join(
+  __dirname,
+  "data",
+  "users.json"
+);
+
+console.log(filePath);
+
+Output:
+
+C:\project\data\users.json
+
+on Windows
+
+/project/data/users.json
+
+on Linux/macOS
+
+Mental Model
+path.join()
+=
+Build a path safely
+2. path.basename()
+
+Gets the file name.
+
+const path = require("path");
+
+console.log(
+  path.basename("/data/users.json")
+);
+
+Output:
+
+users.json
+3. path.extname()
+
+Gets the extension.
+
+console.log(
+  path.extname("users.json")
+);
+
+Output:
+
+.json
+
+Useful for:
+
+Image uploads
+File validation
+4. path.dirname()
+
+Gets the folder path.
+
+console.log(
+  path.dirname("/data/users.json")
+);
+
+Output:
+
+/data
+5. path.parse()
+
+Breaks a path into parts.
+
+console.log(
+  path.parse("/data/users.json")
+);
+
+Output:
+
+{
+  root: "/",
+  dir: "/data",
+  base: "users.json",
+  ext: ".json",
+  name: "users"
+}
+
+Very useful when processing files.
+
+6. path.resolve()
+
+Creates an absolute path.
+
+console.log(
+  path.resolve("data", "users.json")
+);
+
+Output:
+
+C:\project\data\users.json
+
+(or equivalent on Linux/macOS)
+
+Mental Model
+join()
+=
+Connect path pieces
+
+resolve()
+=
+Generate a full absolute path
+Real Backend Example
+
+Suppose you want to read a JSON file.
+
+const fs = require("fs");
+const path = require("path");
+
+const filePath = path.join(
+  __dirname,
+  "data",
+  "users.json"
+);
+
+const data = fs.readFileSync(
+  filePath,
+  "utf-8"
+);
+
+console.log(data);
+
+This works reliably on any OS.
+
+__dirname + Path Module
+
+You'll often see:
+
+const path = require("path");
+
+const filePath = path.join(
+  __dirname,
+  "public",
+  "index.html"
+);
+
+Think:
+
+__dirname
+=
+Current folder
+
+path.join()
+=
+Build path from there
+
+This combination is everywhere in backend projects.
+
+Visual Mental Model
+Project
+│
+├── app.js
+│
+├── data
+│   └── users.json
+│
+└── uploads
+    └── image.png
+
+Node:
+
+path.join(
+  __dirname,
+  "data",
+  "users.json"
+);
+
+↓
+
+Full correct path
+
+↓
+
+fs.readFile(filePath);
+Why Backend Developers Use It So Much
+
+Whenever you:
+
+Read files
+Write files
+Upload images
+Serve static files
+Create logs
+Work with directories
+
+you'll probably use the Path Module.
+
+One-Line Definition
+
+The Path Module is a built-in Node.js module that provides utilities for creating, manipulating, and resolving file and directory paths in a platform-independent way.
+
+The 3 methods you should remember first:
+path.join();      // Build paths
+path.basename();  // Get filename
+path.extname();   // Get extension
+
+If you're learning backend in order, the next module after path should be fs (File System) because path and fs are almost always used together. 🚀

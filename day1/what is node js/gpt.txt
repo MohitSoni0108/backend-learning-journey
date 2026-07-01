@@ -1,0 +1,197 @@
+First Principles
+
+JavaScript was originally created to run inside browsers.
+
+Browser
+├── JavaScript Engine (V8)
+├── Web APIs
+├── DOM
+├── Event Loop
+└── Browser Features
+
+For many years JavaScript could only do things like:
+
+Manipulate HTML
+Handle button clicks
+Make API requests
+Update the UI
+
+It could not:
+
+Read files
+Create servers
+Access OS information
+Work with databases
+
+Because browsers don't allow direct access to your computer for security reasons.
+
+The Problem
+
+People loved JavaScript.
+
+But developers had to learn another language for backend:
+
+Java → Backend
+PHP → Backend
+Python → Backend
+C# → Backend
+
+So the question became:
+
+"Can JavaScript run outside the browser?"
+
+The Solution: Node.js
+
+In 2009, Ryan Dahl created Node.js.
+
+Node.js is basically:
+
+Node.js
+=
+JavaScript Engine (V8)
++
+Node APIs
++
+Event Loop
++
+OS Access
+
+Instead of running inside a browser:
+
+console.log("Hello");
+
+runs directly on your computer.
+
+Browser vs Node.js
+Browser	Node.js
+Runs JS in browser	Runs JS on computer
+Has DOM	No DOM
+Has window object	No window object
+Has Web APIs	Has Node APIs
+Frontend	Backend
+
+Example:
+
+Browser:
+
+document.querySelector("h1");
+
+✅ Works
+
+Node:
+
+document.querySelector("h1");
+
+❌ Error
+
+Because there is no HTML page.
+
+What Extra Powers Does Node Give?
+
+Node provides modules that can interact with the operating system.
+
+File System
+const fs = require("fs");
+
+Read files.
+
+Write files.
+
+Delete files.
+
+Operating System
+const os = require("os");
+
+Get:
+
+CPU info
+Memory info
+Platform info
+HTTP Server
+const http = require("http");
+
+Create a web server.
+
+http.createServer((req, res) => {
+  res.end("Hello World");
+});
+
+Now your computer can serve web pages.
+
+Mental Model
+
+Think of Node.js as:
+
+JavaScript
++
+Superpowers
+
+or
+
+Browser Runtime
+=
+V8 + Browser APIs
+
+Node Runtime
+=
+V8 + Node APIs
+
+The JavaScript language is the same.
+
+let a = 10;
+function greet() {}
+const arr = [1, 2, 3];
+
+All of this works exactly the same.
+
+Only the environment changes.
+
+Why Is Node.js So Important For Backend?
+
+Backend needs to:
+
+Receive requests
+Talk to databases
+Read/write files
+Authenticate users
+Send emails
+Handle payments
+
+Node gives JavaScript access to all these capabilities.
+
+That's why the modern backend stack often looks like:
+
+Client (Browser)
+        ↓
+Express.js
+        ↓
+Node.js
+        ↓
+Database (MongoDB/PostgreSQL)
+The One-Line Definition
+
+Node.js is a JavaScript runtime environment built on Google's V8 engine that allows JavaScript to run outside the browser and interact with the operating system, files, networks, and databases.
+
+For your backend journey, the learning order should be:
+
+Node.js
+   ↓
+NPM
+   ↓
+Modules
+   ↓
+File System
+   ↓
+HTTP Module
+   ↓
+Express.js
+   ↓
+REST APIs
+   ↓
+MongoDB/PostgreSQL
+   ↓
+Authentication
+   ↓
+Backend Projects
+
+This is the exact path from "I know JavaScript" to "I can build backend systems." 🚀

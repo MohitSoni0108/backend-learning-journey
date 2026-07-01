@@ -1,0 +1,89 @@
+diagram for day1
+
+Node.js
+=
+JavaScript Engine (V8)
++
+Node APIs
++
+Event Loop
++
+OS Access
+
+| Browser            | Node.js             |
+| ------------------ | ------------------- |
+| Runs JS in browser | Runs JS on computer |
+| Has DOM            | No DOM              |
+| Has window object  | No window object    |
+| Has Web APIs       | Has Node APIs       |
+| Frontend           | Backend             |
+
+
+Module Wrapper Function. convert internally 
+
+convert 
+const secret = 100;
+
+function add(a, b) {
+  return a + b;
+}
+
+to 
+
+(function (
+  exports,
+  require,
+  module,
+  __filename,
+  __dirname
+) {
+
+  const secret = 100;
+
+  function add(a, b) {
+    return a + b;
+  }
+
+});
+
+1. Read the file
+        ↓
+2. Wrap inside Module Wrapper Function
+        ↓
+3. Provide:
+   - exports
+   - require
+   - module
+   - __filename
+   - __dirname
+        ↓
+4. Execute the file
+        ↓
+5. Return module.exports
+        ↓
+6. Cache the module
+
+
+
+
+What Happens When You Install a Package?
+npm install express
+
+NPM:
+
+1. Connects to NPM Registry
+          ↓
+2. Downloads Express
+          ↓
+3. Downloads Express dependencies
+          ↓
+4. Creates node_modules
+          ↓
+5. Updates package.json
+          ↓
+6. Updates package-lock.json
+
+
+
+
+
