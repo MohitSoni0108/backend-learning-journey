@@ -1,0 +1,64 @@
+User enters URL
+       |
+       V
+Browser sends HTTP Request
+       |
+       V
+Machine receives request
+       |
+       V
+OS checks Port
+       |
+       V
+Request forwarded to Node Server
+       |
+       V
+http.createServer callback executes
+       |
+       V
+req object contains request details
+       |
+       V
+Server checks Route
+       |
+       ├── /
+       ├── /about
+       ├── /users
+       └── /products
+       |
+       V
+Corresponding Logic Executes
+       |
+       V
+Response created using res object
+       |
+       V
+Response sent back to Browser
+
+
+ok so now the whole mental model which i got form there regarding the server model 
+1.basically when we paste a url in search engine , we make a http request 
+2.so we have a http module in node js which help use to handle that http request 
+3. how by creating a http server 
+so we create a http server by this const server = http.createServer(callback) 
+
+now here server is created in which we pass a call back function  , means whenevr that server start then when the request will come then the call abck will start 
+now call back function is basically (req,res)=>{}
+it has 2 parameters req and res , req is bascially what request is coming to server by client 
+res objects is bascially how to respond to it , so for this 2 objects we have different properties to handle the complete req and res posne thing on a server 
+now we have made the server but it si not working , so to start the server we do server.listen 
+so it start at some port , what is port bascially on the machine has ip address and port is kind fo rrom 
+means if request comes to machine port help decide os that on machine tow hich software the req has come 
+now comes the route 
+route is like rooms for the hotel server 
+means server will have different pages  , so route is like to explore the different pages of server 
+its like prute decide after reaching the server which page you have to go 
+or more specifically after reaching the server which api to call may be 
+
+Server = Hotel
+
+Route = Room Number
+
+Router = Receptionist
+
+

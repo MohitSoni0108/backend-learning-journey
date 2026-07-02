@@ -1,0 +1,9 @@
+The fs module lets Node.js talk to files.
+The http module lets Node.js talk to the internet.
+
+fs module  -> Files
+path module -> Paths
+http module -> Network Requests
+
+
+the important learning is the moment we clikc some url on browser that means we are makign a request on that server so server will bascially get request
