@@ -1,0 +1,717 @@
+The fs module lets Node.js talk to files.
+The http module lets Node.js talk to the internet.
+
+fs module  -> Files
+path module -> Paths
+http module -> Network Requests
+
+
+the important learning is the moment we clikc some url on browser that means we are makign a request on that server so server will bascially get request
+# Node.js Backend Fundamentals Notes
+
+## 1. Why Node.js?
+
+Node.js allows JavaScript to run outside the browser.
+
+Before Node.js:
+
+```text
+JavaScript → Browser Only
+```
+
+After Node.js:
+
+```text
+JavaScript
+    |
+    +-- Browser
+    |
+    +-- Server
+```
+
+This allows us to build backend applications using JavaScript.
+
+---
+
+# 2. What is HTTP?
+
+HTTP stands for:
+
+```text
+HyperText Transfer Protocol
+```
+
+It is the communication protocol used between:
+
+```text
+Client (Browser)
+        ↕
+Server
+```
+
+Example:
+
+```text
+Browser Request:
+GET /about
+
+Server Response:
+About Page
+```
+
+---
+
+# 3. What is a Server?
+
+Definition:
+
+A server is a program that listens for requests and sends responses.
+
+Mental Model:
+
+```text
+Restaurant
+
+Customer → Order Food
+Restaurant → Process Order
+Restaurant → Send Food
+```
+
+Backend Equivalent:
+
+```text
+Client → Request
+Server → Process Request
+Server → Response
+```
+
+---
+
+# 4. HTTP Module
+
+Definition:
+
+The built-in Node.js module used to create HTTP servers and handle HTTP requests/responses.
+
+Import:
+
+```js
+const http = require("http");
+```
+
+Mental Model:
+
+```text
+fs module   → Talk to files
+
+path module → Talk to paths
+
+http module → Talk to internet
+```
+
+---
+
+# 5. Creating a Server
+
+Syntax:
+
+```js
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+
+});
+```
+
+Definition:
+
+```js
+http.createServer(callback)
+```
+
+creates a server and registers a callback that runs whenever a request arrives.
+
+Mental Model:
+
+```text
+Server Created
+      |
+      V
+Waiting...
+      |
+      V
+Request Arrives
+      |
+      V
+Callback Executes
+```
+
+---
+
+# 6. Starting a Server
+
+Syntax:
+
+```js
+server.listen(3000);
+```
+
+Example:
+
+```js
+server.listen(3000, () => {
+    console.log("Server Started");
+});
+```
+
+Definition:
+
+Binds the server to a port and starts listening for requests.
+
+Mental Model:
+
+```text
+Restaurant Built
+        |
+        V
+Open Restaurant
+        |
+        V
+Customers Can Enter
+```
+
+---
+
+# 7. What is a Port?
+
+Definition:
+
+A port helps the Operating System decide which application should receive a request.
+
+Mental Model:
+
+```text
+IP Address = Building
+
+Port = Apartment Number
+```
+
+Example:
+
+```text
+http://localhost:3000
+```
+
+Breakdown:
+
+```text
+localhost = Machine
+
+3000 = Port
+```
+
+---
+
+# 8. Request and Response Cycle
+
+Flow:
+
+```text
+Browser
+   |
+Request
+   |
+   V
+Server
+   |
+Response
+   |
+   V
+Browser
+```
+
+---
+
+# 9. Request Object (req)
+
+Definition:
+
+Contains information about the incoming request.
+
+Example:
+
+```js
+const server = http.createServer((req, res) => {
+    console.log(req.url);
+});
+```
+
+Useful Properties:
+
+```js
+req.url
+req.method
+req.headers
+```
+
+Example:
+
+```text
+http://localhost:3000/about
+```
+
+Output:
+
+```js
+req.url
+```
+
+returns:
+
+```text
+/about
+```
+
+---
+
+# 10. Response Object (res)
+
+Definition:
+
+Used to send data back to the client.
+
+Example:
+
+```js
+res.end("Hello World");
+```
+
+Mental Model:
+
+```text
+req = What client wants
+
+res = What server sends back
+```
+
+Important:
+
+```js
+res.end()
+```
+
+means:
+
+```text
+Send Response
++
+Close Response
+```
+
+---
+
+# 11. Why Browser Keeps Loading
+
+Code:
+
+```js
+const server = http.createServer((req, res) => {
+    console.log("Request Received");
+});
+```
+
+Problem:
+
+```text
+Request received
+Response never sent
+```
+
+Result:
+
+```text
+Browser keeps loading forever
+```
+
+Fix:
+
+```js
+res.end("Done");
+```
+
+---
+
+# 12. What is Routing?
+
+Definition:
+
+Routing is deciding what logic should run based on the URL.
+
+Example Routes:
+
+```text
+/
+/about
+/contact
+```
+
+Mental Model:
+
+```text
+Hotel
+
+Route = Room Number
+```
+
+---
+
+# 13. Basic Routing
+
+Code:
+
+```js
+const server = http.createServer((req, res) => {
+
+    if(req.url === "/"){
+        res.end("Home Page");
+    }
+
+    else if(req.url === "/about"){
+        res.end("About Page");
+    }
+
+    else{
+        res.end("404 Page Not Found");
+    }
+
+});
+```
+
+Mental Model:
+
+```text
+Request Arrives
+       |
+       V
+req.url
+       |
+       V
+Choose Logic
+       |
+       V
+Send Response
+```
+
+---
+
+# 14. EventEmitter
+
+Import:
+
+```js
+const EventEmitter = require("events");
+```
+
+Create Object:
+
+```js
+const emitter = new EventEmitter();
+```
+
+Definition:
+
+Allows one part of an application to emit events and other parts to listen and react.
+
+Mental Model:
+
+```text
+Event Emitter = Radio Station
+
+Listeners = People Listening
+
+Event = Broadcast Message
+```
+
+---
+
+# 15. Listener
+
+Definition:
+
+A callback function waiting for an event.
+
+Syntax:
+
+```js
+emitter.on("login", () => {
+    console.log("User Logged In");
+});
+```
+
+Meaning:
+
+```text
+If login event happens,
+run this callback.
+```
+
+---
+
+# 16. Emit Event
+
+Syntax:
+
+```js
+emitter.emit("login");
+```
+
+Meaning:
+
+```text
+Announce:
+"login happened"
+```
+
+Mental Model:
+
+```text
+emit()
+      |
+      V
+Find Listeners
+      |
+      V
+Execute Callbacks
+```
+
+---
+
+# 17. Complete EventEmitter Example
+
+```js
+const EventEmitter = require("events");
+
+const emitter = new EventEmitter();
+
+emitter.on("login", () => {
+    console.log("Welcome User");
+});
+
+emitter.emit("login");
+```
+
+Output:
+
+```text
+Welcome User
+```
+
+---
+
+# 18. Multiple Listeners
+
+```js
+emitter.on("login", () => {
+    console.log("Logger");
+});
+
+emitter.on("login", () => {
+    console.log("Counter");
+});
+
+emitter.on("login", () => {
+    console.log("Analytics");
+});
+
+emitter.emit("login");
+```
+
+Output:
+
+```text
+Logger
+Counter
+Analytics
+```
+
+---
+
+# 19. EventEmitter + HTTP Server
+
+Listener:
+
+```js
+emitter.on("requestReceived", (req) => {
+    console.log(`Route Visited: ${req.url}`);
+});
+```
+
+Server:
+
+```js
+const server = http.createServer((req, res) => {
+
+    emitter.emit("requestReceived", req);
+
+    res.end("Done");
+
+});
+```
+
+Flow:
+
+```text
+Request Arrives
+       |
+       V
+emit("requestReceived")
+       |
+       V
+Listener Executes
+       |
+       V
+Response Sent
+```
+
+---
+
+# 20. Request Counter
+
+Code:
+
+```js
+let requestCount = 0;
+
+emitter.on("requestReceived", () => {
+    requestCount++;
+
+    console.log(`Total Requests: ${requestCount}`);
+});
+```
+
+Why Doesn't It Reset?
+
+Because:
+
+```js
+let requestCount = 0;
+```
+
+runs only once when:
+
+```bash
+node server.js
+```
+
+starts.
+
+Mental Model:
+
+```text
+Server Process
+      |
+      +-- requestCount
+      +-- EventEmitter
+      +-- HTTP Server
+      |
+      V
+Requests Keep Arriving
+```
+
+---
+
+# 21. req.method
+
+Definition:
+
+Tells which HTTP method was used.
+
+Example:
+
+```js
+console.log(req.method);
+```
+
+Output:
+
+```text
+GET
+```
+
+Common Methods:
+
+```text
+GET
+POST
+PUT
+PATCH
+DELETE
+```
+
+---
+
+# 22. Analytics Listener
+
+```js
+emitter.on("requestReceived", (req) => {
+
+    console.log(`Method: ${req.method}`);
+
+    console.log(`Route: ${req.url}`);
+
+});
+```
+
+Output:
+
+```text
+Method: GET
+Route: /about
+```
+
+---
+
+# Final Mental Model
+
+Everything learned today can be reduced to:
+
+```text
+Browser
+   |
+HTTP Request
+   |
+   V
+Node Server
+   |
+(req,res)
+   |
+req.url
+req.method
+   |
+Routing Logic
+   |
+emit("requestReceived")
+   |
+   ├── Logger Listener
+   ├── Counter Listener
+   └── Analytics Listener
+   |
+res.end(...)
+   |
+HTTP Response
+   |
+   V
+Browser
+```
+
+Backend Development Core Principle:
+
+```text
+Request Arrives
+      |
+Understand Client Intent
+      |
+Execute Logic
+      |
+Send Response
+```
