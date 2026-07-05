@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full-Stack Bookstore Manager</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --background: #f8fafc;
+            --text: #0f172a;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-bottom: 24px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 6px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+        }
+        button:hover { opacity: 0.9; }
+        .search-box {
+            margin-bottom: 20px;
+        }
+        .book-list {
+            display: grid;
+            gap: 16px;
+        }
+        .book-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 2px 4px rgb(0 0 0 / 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .book-info h3 { margin: 0 0 4px 0; font-size: 18px; }
+        .book-info p { margin: 0; color: #64748b; font-size: 14px; }
+        .actions { display: flex; gap: 8px; }
+        .btn-delete { background-color: var(--danger); width: auto; padding: 8px 12px; }
+        .btn-edit { background-color: #e2e8f0; color: var(--text); width: auto; padding: 8px 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>📚 Bookstore Management Dashboard</h1>
+            <p>A Full-Stack Node.js, Express, & MongoDB Application</p>
+        </header>
+
+        <!-- 1. CREATE BOOK FORM -->
+        <div class="card">
+            <h2>Add a New Document to Database</h2>
+            <form id="bookForm">
+                <div class="form-group">
+                    <label>Book Title</label>
+                    <input type="text" id="title" required placeholder="e.g., Clean Code">
+                </div>
+                <div class="form-group">
+                    <label>Author</label>
+                    <input type="text" id="author" required placeholder="e.g., Robert C. Martin">
+                </div>
+                <div class="form-group">
+                    <label>Publication Year</label>
+                    <input type="number" id="year" required placeholder="e.g., 2008">
+                </div>
+                <button type="submit">Commit to Cloud MongoDB Atlas</button>
+            </form>
+        </div>
+
+        <!-- 2. READ & SEARCH SECTION -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search books by title in real-time..." oninput="loadBooks()">
+        </div>
+
+        <h2>Stored Inventory</h2>
+        <div id="bookListContainer" class="book-list">
+            <!-- Dynamic data from the API goes here -->
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api/books';
+
+        // PIPELINE: Fetch data from backend (GET /api/books/get)
+        async function loadBooks() {
+            const searchQuery = document.getElementById('searchInput').value;
+            const container = document.getElementById('bookListContainer');
+            
+            try {
+                // Build search URL dynamically based on input
+                const url = searchQuery ? `${API_URL}/get?search=${searchQuery}` : `${API_URL}/get`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                container.innerHTML = '';
+
+                if (result.success && result.data.length > 0) {
+                    result.data.forEach(book => {
+                        container.innerHTML += `
+                            <div class="book-item">
+                                <div class="book-info">
+                                    <h3>${book.title}</h3>
+                                    <p>By ${book.author} • Published in ${book.year}</p>
+                                </div>
+                                <div class="actions">
+                                    <button class="btn-edit" onclick="editBook('${book._id}', '${book.title}', '${book.author}', ${book.year})">Edit</button>
+                                    <button class="btn-delete" onclick="deleteBook('${book._id}')">Delete</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = `<p style="text-align:center; color:#64748b;">No books found matching criteria.</p>`;
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // PIPELINE: Intercept submit, package form data into JSON, and POST to backend
+        document.getElementById('bookForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const payload = {
+                title: document.getElementById('title').value,
+                author: document.getElementById('author').value,
+                year: parseInt(document.getElementById('year').value)
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/add`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    document.getElementById('bookForm').reset();
+                    loadBooks(); // Refresh UI instantly
+                }
+            } catch (error) {
+                console.error('Error creating document:', error);
+            }
+        });
+
+        // PIPELINE: Send individual delete call (DELETE /api/books/delete/:id)
+        async function deleteBook(id) {
+            if (confirm('Are you sure you want to drop this document from the database?')) {
+                try {
+                    await fetch(`${API_URL}/delete/${id}`, { method: 'DELETE' });
+                    loadBooks(); // Refresh UI
+                } catch (error) {
+                    console.error('Error deleting document:', error);
+                }
+            }
+        }
+
+        // PIPELINE: Ask for new details and execute update call (PUT /api/books/update/:id)
+        async function editBook(id, currentTitle, currentAuthor, currentYear) {
+            const newTitle = prompt("Enter new title:", currentTitle);
+            const newAuthor = prompt("Enter new author:", currentAuthor);
+            const newYear = prompt("Enter new year:", currentYear);
+
+            if (newTitle && newAuthor && newYear) {
+                const payload = { title: newTitle, author: newAuthor, year: parseInt(newYear) };
+                
+                try {
+                    await fetch(`${API_URL}/update/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    loadBooks(); // Refresh UI
+                } catch (error) {
+                    console.error('Error updating document:', error);
+                }
+            }
+        }
+
+        // Initial launch loop execution
+        loadBooks();
+    </script>
+</body>
+</html>
